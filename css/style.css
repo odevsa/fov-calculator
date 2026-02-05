@@ -91,7 +91,7 @@ body {
 }
 
 [data-theme="dark"] body {
-    background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+    background: linear-gradient(135deg, #1f1f2e 0%, #2a2a3e 100%);
 }
 
 .container {
@@ -404,7 +404,7 @@ button {
     background: var(--bg-primary);
     padding: 5px 10px;
     border-radius: 12px;
-    border-left: 4px solid var(--accent-primary);
+    border-top: 4px solid var(--accent-primary);
     box-shadow: 0 2px 8px var(--shadow-light);
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
