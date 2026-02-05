@@ -1,95 +1,104 @@
-const DEG_TO_RAD = Math.PI / 180;
-const RAD_TO_DEG = 180 / Math.PI;
 const INCH_TO_CM = 2.54;
-const MM_TO_CM = 10;
+const GAMES = {
+    horizontal: [
+        { name: 'Euro Truck Simulator', factor: 1, digits: 0, unit: '°' },
+        { name: 'RaceRoom Racing Experience', factor: 1, digits: 1, unit: '°' },
+    ],
+    vertical: [
+        { name: 'Assetto Corsa', factor: 1, digits: 1, unit: '°' },
+        { name: 'Assetto Corsa Competizione', factor: 1, digits: 1, unit: '°' },
+        { name: 'rFactor', factor: 1, digits: 0, unit: '°' },
+    ]
+}
 
 function parseRatio(ratioStr) {
     const parts = ratioStr.trim().split(':');
-    if (parts.length !== 2) return null;
+    if (parts.length !== 2) return;
 
-    const w = parseFloat(parts[0]);
-    const h = parseFloat(parts[1]);
+    const h = parseFloat(parts[0]);
+    const v = parseFloat(parts[1]);
     
-    return (isNaN(w) || isNaN(h) || w <= 0 || h <= 0) ? null : { w, h };
+    if(isNaN(h) || isNaN(v) || h <= 0 || v <= 0) return;
+
+    return { h, v };
 }
 
-function getScreenDimensions() {
+function getRatio() {
     const ratio = document.getElementById('screenRatio').value;
-    const screenSize = parseFloat(document.getElementById('screenSize').value);
-
     if (!ratio || !screenSize) return null;
+    return parseRatio(ratio);
+}
 
-    const r = parseRatio(ratio);
-    if (!r) return null;
-
-    const diagonal = screenSize;
-    const scale = diagonal / Math.sqrt(r.w * r.w + r.h * r.h);
-    
-    return { width: r.w * scale, height: r.h * scale };
+function getSize() {
+    return parseFloat(document.getElementById('screenSize').value);
 }
 
 function getDistance() {
     const distance = parseFloat(document.getElementById('distance').value);
     const unit = document.getElementById('distanceUnit').value;
     
-    if (!distance || isNaN(distance)) return null;
+    if (!distance || isNaN(distance)) return;
     
     return unit === 'inch' ? distance * INCH_TO_CM : distance;
 }
 
-function calcTriangularAngle(baseInCm, distanceCm) {
-    return Math.atan2(baseInCm / 2, distanceCm) * 2;
-}
-
-function calcCurvedAngle(baseInCm, radiusMm, distanceCm) {
-    const radiusCm = radiusMm / MM_TO_CM;
-    const arcAngle = baseInCm / radiusCm;
-    const b = radiusCm * (1 - Math.cos(arcAngle / 2));
-    const c = Math.sqrt((2 * radiusCm * b) - (b * b));
-    
-    return 2 * Math.atan2(c, distanceCm - b);
-}
 
 function calculateFOV() {
-    const dimensions = getScreenDimensions();
+    const ratio = getRatio();
+    const size = getSize();
     const distance = getDistance();
+    const screens = document.getElementById('tripleScreen').checked ? 3 : 1;
+    const curved = document.getElementById('curvedScreen').checked;
+    const radius = parseInt(document.getElementById('curveRadius').value) / 10;
+    const bezel = (parseFloat(document.getElementById('bezelThickness').value) || 0) / 10;
 
-    if (!dimensions || distance === null) {
-        alert(t('errorRequired'));
-        return;
-    }
-
-    const isCurved = document.getElementById('curvedScreen').checked;
-    const radiusMm = parseInt(document.getElementById('curveRadius').value) || 1500;
-    const isTriple = document.getElementById('tripleScreen').checked;
-    const numScreens = isTriple ? 3 : 1;
-    const bezelThickness = (parseFloat(document.getElementById('bezelThickness').value) || 0) / 10 * 2;
-
-    const width = (dimensions.width * INCH_TO_CM) + (isTriple ? bezelThickness : 0);
-    const height = dimensions.height * INCH_TO_CM;
-
-    const hAngle = isCurved 
-        ? calcCurvedAngle(width, radiusMm, distance)
-        : calcTriangularAngle(width, distance);
-
-    const ratio = parseRatio(document.getElementById('screenRatio').value);
-    const vAngle = 2 * Math.atan2(Math.tan(hAngle / 2) * ratio.h, ratio.w);
-
-    const horizontalFOV = (hAngle * numScreens) * RAD_TO_DEG;
-    const verticalFOV = vAngle * RAD_TO_DEG;
-
-    updateResults(horizontalFOV, verticalFOV);
+    const fov = FOV.calculate({ratio, size, distance, screens, curved, radius, bezel});
+    updateResults(fov);
 }
 
-function updateResults(horizontalFOV, verticalFOV) {
-    document.getElementById('horizontalFOV').textContent = Math.round(horizontalFOV) + '°';
-    document.getElementById('verticalFOV').textContent = Math.round(verticalFOV) + '°';
-    document.getElementById('resultsSection').style.display = 'block';
+function gameHtml(label, value) {
+    const divContainer = document.createElement('div');
+    divContainer.className = 'result-item';
+
+    const divLabel = document.createElement('div');
+    divLabel.className = 'result-label';
+    divLabel.textContent = label;
+    
+    const divValue = document.createElement('div');
+    divValue.className = 'result-value';
+    divValue.textContent = value;
+
+    divContainer.appendChild(divLabel);
+    divContainer.appendChild(divValue);
+    return divContainer;
+}
+
+function updateResults(fov) {
+    const voidSimbol = '∞';
+    document.getElementById('horizontalFOV').textContent = isNaN(fov.horizontal) ? voidSimbol: Math.round(fov.horizontal) + '°';
+    document.getElementById('verticalFOV').textContent = isNaN(fov.vertical) ? voidSimbol: Math.round(fov.vertical) + '°';
+    document.getElementById('tripleScreenAngle').textContent =  isNaN(fov.angle) ? voidSimbol: fov.angle.toFixed(2) + '°';
+
+
+    const horizontalGamesDiv = document.getElementById('horizontal-games');
+    horizontalGamesDiv.innerHTML = '';
+    GAMES.horizontal.forEach(game => {
+        const value = isNaN(fov.horizontal) ? voidSimbol : (fov.horizontal * game.factor).toFixed(game.digits) + game.unit;
+        horizontalGamesDiv.appendChild(gameHtml(game.name, value));
+    });
+
+    const verticalGamesDiv = document.getElementById('vertical-games');
+    verticalGamesDiv.innerHTML = '';
+    GAMES.vertical.forEach(game => {
+        const value = isNaN(fov.vertical) ? voidSimbol : (fov.vertical * game.factor).toFixed(game.digits) + game.unit;
+        verticalGamesDiv.appendChild(gameHtml(game.name, value));
+    });
 }
 
 function toggleCurveRadius() {
     const isCurved = document.getElementById('curvedScreen').checked;
     document.getElementById('radiusGroup').classList.toggle('hidden', !isCurved);
+    calculateFOV();
 }
 
 function toggleBezel() {
@@ -123,10 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('tripleScreen').addEventListener('change', toggleBezel);
     document.getElementById('singleScreen').addEventListener('change', toggleBezel);
     document.getElementById('distanceUnit').addEventListener('change', convertDistanceUnit);
-
-    document.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') calculateFOV();
-    });
+    document.getElementById('curveRadius').addEventListener('input', toggleCurveRadius);
+    
+    document.getElementById('screenRatio').addEventListener('change', calculateFOV);
+    document.getElementById('screenSize').addEventListener('input', calculateFOV);
+    document.getElementById('distance').addEventListener('input', calculateFOV);
+    document.getElementById('curveRadius').addEventListener('input', calculateFOV);
+    document.getElementById('bezelThickness').addEventListener('input', calculateFOV);
 
     calculateFOV();
 });

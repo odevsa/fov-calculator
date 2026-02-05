@@ -45,7 +45,7 @@
 
                 <div class="form-group">
                     <label for="screenRatio" id="screenRatioLabel">Screen Ratio</label>
-                    <select id="screenRatio" onchange="calculateFOV()">
+                    <select id="screenRatio">
                         <option value="16:9" selected>16:9</option>
                         <option value="16:10">16:10</option>
                         <option value="21:9">21:9</option>
@@ -68,8 +68,8 @@
                 <div class="form-group">
                     <label id="distanceLabel">Distance to Screen</label>
                     <div class="input-wrapper">
-                        <input type="number" id="distance" placeholder="50" min="30" max="200" step="1" value="50" oninput="calculateFOV()">
-                        <select id="distanceUnit" onchange="calculateFOV()">
+                        <input type="number" id="distance" placeholder="50" min="1" max="200" step="1" value="50" oninput="calculateFOV()">
+                        <select id="distanceUnit">
                             <option value="cm">cm</option>
                             <option value="inch">inches</option>
                         </select>
@@ -80,11 +80,11 @@
                     <label id="screenTypeLabel">Setup Type</label>
                     <div class="radio-group">
                         <div class="radio-option">
-                            <input type="radio" id="singleScreen" name="screenType" value="single" checked onchange="calculateFOV()">
+                            <input type="radio" id="singleScreen" name="screenType" value="single" checked>
                             <label for="singleScreen" id="singleScreenLabel">Single Screen</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="tripleScreen" name="screenType" value="triple" onchange="calculateFOV()">
+                            <input type="radio" id="tripleScreen" name="screenType" value="triple">
                             <label for="tripleScreen" id="tripleScreenLabel">Triple Screen</label>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
 
                 <div class="form-group">
                     <div class="checkbox-group">
-                        <input type="checkbox" id="curvedScreen" onchange="toggleCurveRadius(); calculateFOV();">
+                        <input type="checkbox" id="curvedScreen">
                         <label for="curvedScreen" id="curvedScreenLabel">Curved Screen</label>
                     </div>
                 </div>
@@ -129,13 +129,19 @@
                                 <div class="result-label" id="horizontalFOVLabel">Horizontal FOV</div>
                                 <div class="result-value" id="horizontalFOV">-</div>
                             </div>
+                            <div id="horizontal-games" class="results-col"></div>
                         </div>
                         <div class="results-col">
                             <div class="result-item">
                                 <div class="result-label" id="verticalFOVLabel">Vertical FOV</div>
                                 <div class="result-value" id="verticalFOV">-</div>
                             </div>
+                            <div id="vertical-games" class="results-col"></div>
                         </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label" id="tripleScreenAngleLabel">Triple Screen Angle</div>
+                        <div class="result-value" id="tripleScreenAngle">-</div>
                     </div>
                 </div>
             </div>
@@ -144,6 +150,7 @@
 
     <script src="js/theme.js"></script>
     <script src="js/translations.js"></script>
+    <script src="js/fov.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

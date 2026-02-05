@@ -327,6 +327,9 @@ button {
 }
 
 .results-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     background: var(--bg-secondary);
     border-radius: 15px;
     padding: 20px;
@@ -339,7 +342,6 @@ button {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -371,11 +373,11 @@ button {
 
 .result-label {
     font-size: 0.75rem;
+    text-align: center;
     color: var(--text-secondary);
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 8px;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 .result-value {
