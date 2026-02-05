@@ -404,7 +404,7 @@ button {
     background: var(--bg-primary);
     padding: 5px 10px;
     border-radius: 12px;
-    border-top: 4px solid var(--accent-primary);
+    border-bottom: 4px solid var(--accent-primary);
     box-shadow: 0 2px 8px var(--shadow-light);
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
