@@ -12,6 +12,7 @@
     <meta name="theme-color" content="#1a0033">
     
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖵</text></svg>">
 </head>
 <body>
     <div class="container">
@@ -35,14 +36,12 @@
         </div>
 
         <div class="header">
-            <h1 id="headerTitle">FOV Calculator</h1>
+            <h1 id="headerTitle">🖵 FOV Calculator</h1>
             <p id="headerSubtitle">Calculate the ideal field of view for racing simulators</p>
         </div>
 
         <div class="content">
             <div class="section">
-                <h2 class="section-title" id="settingsTitle">🖥️ Settings</h2>
-
                 <div class="form-group">
                     <label for="screenRatio" id="screenRatioLabel">Screen Ratio</label>
                     <select id="screenRatio">
@@ -81,11 +80,11 @@
                     <div class="radio-group">
                         <div class="radio-option" for="singleScreen">
                             <input type="radio" id="singleScreen" name="screenType" value="single" checked>
-                            <label for="singleScreen">🖥️<br /><span id="singleScreenLabel">Single Screen</span></label>
+                            <label for="singleScreen">🖵<br /><span id="singleScreenLabel">Single Screen</span></label>
                         </div>
                         <div class="radio-option" for="tripleScreen">
                             <input type="radio" id="tripleScreen" name="screenType" value="triple">
-                            <label for="tripleScreen">🖥️🖥️🖥️<br /><span id="tripleScreenLabel">Triple Screen</span></label>
+                            <label for="tripleScreen">🖵🖵🖵<br /><span id="tripleScreenLabel">Triple Screen</span></label>
                         </div>
                     </div>
                 </div>
@@ -121,8 +120,9 @@
             </div>
 
             <div class="section">
+                <canvas class="draw" width="600" height="600" id="draw"></canvas>
+
                 <div class="results-section" id="resultsSection">
-                    <h2 class="results-title" id="resultsTitle">📊 Results</h2>
                     <div class="results-row">
                         <div class="results-col">
                             <div class="result-item">
@@ -148,8 +148,9 @@
         </div>
     </div>
 
-    <script src="js/theme.js"></script>
     <script src="js/translations.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/draw.js"></script>
     <script src="js/fov.js"></script>
     <script src="js/script.js"></script>
 </body>

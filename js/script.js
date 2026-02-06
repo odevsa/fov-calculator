@@ -54,6 +54,14 @@ function calculateFOV() {
 
     const fov = FOV.calculate({ratio, size, distance, screens, curved, radius, bezel});
     updateResults(fov);
+    updateDraw({
+        horizontal: fov.horizontal, 
+        vertical: fov.vertical,
+        screenAmount: screens,
+        tripleScreenAngle: fov.angle,
+        screenCurveRadius: curved ? radius : undefined,
+        distance: distance,
+    });
 }
 
 function gameHtml(label, value) {

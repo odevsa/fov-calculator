@@ -51,9 +51,8 @@ async function updatePageLanguage() {
     const lang = normalizeLocale(raw);
     const trans = await loadTranslation(lang);
     document.documentElement.lang = lang;
-    document.getElementById('headerTitle').textContent = trans.title || 'FOV Calculator';
+    document.getElementById('headerTitle').textContent = '🖵 ' + (trans.title || 'FOV Calculator');
     document.getElementById('headerSubtitle').textContent = trans.subtitle || '';
-    document.getElementById('settingsTitle').textContent = '🖥️ ' + (trans.settings || 'Settings');
     document.getElementById('screenRatioLabel').textContent = trans.screenRatio || 'Screen Ratio';
     document.getElementById('screenSizeLabel').textContent = trans.screenSize || 'Screen Size';
     const inchesUnitEl = document.getElementById('inchesUnit');
@@ -79,8 +78,6 @@ async function updatePageLanguage() {
     if (bezel) bezel.textContent = trans.bezelThickness || 'Bezel Thickness';
     const info = document.getElementById('infoText');
     if (info && trans.tip) info.innerHTML = trans.tip;
-    const resultsTitle = document.getElementById('resultsTitle');
-    if (resultsTitle) resultsTitle.textContent = '📊 ' + (trans.results || 'Results');
     const hLabel = document.getElementById('horizontalFOVLabel');
     if (hLabel) hLabel.textContent = trans.horizontalFov || 'Horizontal FOV';
     const vLabel = document.getElementById('verticalFOVLabel');
