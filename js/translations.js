@@ -51,7 +51,7 @@ async function updatePageLanguage() {
     const lang = normalizeLocale(raw);
     const trans = await loadTranslation(lang);
     document.documentElement.lang = lang;
-    document.getElementById('headerTitle').textContent = '🖵 ' + (trans.title || 'FOV Calculator');
+    document.getElementById('headerTitle').textContent = '⎚ ' + (trans.title || 'FOV Calculator');
     document.getElementById('headerSubtitle').textContent = trans.subtitle || '';
     document.getElementById('screenRatioLabel').textContent = trans.screenRatio || 'Screen Ratio';
     document.getElementById('screenSizeLabel').textContent = trans.screenSize || 'Screen Size';
