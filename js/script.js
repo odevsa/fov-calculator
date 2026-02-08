@@ -11,6 +11,36 @@ const GAMES = {
     ]
 }
 
+const CARS = {
+    drift: {
+        image: `img/drift.png`,
+        car: { width: 169, height: 129, length: 452 },
+        scale: 1.75,
+        offset: {
+            horizontal: { x: 250, y: 140 },
+            vertical: { x: 250, y: 105 },
+        },
+    },
+    gt3: {
+        image: `img/gt3.png`,
+        car: { width: 185.2, height: 127.9, length: 457.3 },
+        scale: 1.725,
+        offset: {
+            horizontal: { x: 240, y: 65 },
+            vertical: { x: 240, y: 105 },
+        },
+    },
+    f1: {
+        image: `img/f1.png`,
+        scale: 1.45,
+        car: { width: 190, height: 110, length: 545.0 },
+        offset: {
+            horizontal: { x: 270, y: 100 },
+            vertical: { x: 270, y: 85 },
+        },
+    },
+}
+
 function parseRatio(ratioStr) {
     const parts = ratioStr.trim().split(':');
     if (parts.length !== 2) return;
@@ -62,7 +92,7 @@ function calculateFOV() {
         tripleScreenAngle: fov.angle,
         screenCurveRadius: curved ? radius : undefined,
         distance: distance,
-        car: `img/${carType}.png`
+        carType: CARS[carType],
     });
 }
 
