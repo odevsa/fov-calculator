@@ -1,17 +1,16 @@
 const loadedTranslations = {};
-const availableLocales = ['en','pt-BR','es','fr','de','it','ja','zh-CN','ru','ko'];
 
 function normalizeLocale(lang) {
     if (!lang) return 'en';
     lang = String(lang).replace('_', '-');
-    if (availableLocales.includes(lang)) return lang;
+    if (LOCALES.includes(lang)) return lang;
     const parts = lang.split('-');
     if (parts.length > 1) {
         const candidate = parts[0].toLowerCase() + '-' + parts[1].toUpperCase();
-        if (availableLocales.includes(candidate)) return candidate;
+        if (LOCALES.includes(candidate)) return candidate;
     }
     const base = parts[0].toLowerCase();
-    for (const loc of availableLocales) {
+    for (const loc of LOCALES) {
         if (loc.startsWith(base)) return loc;
     }
     return 'en';

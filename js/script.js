@@ -1,49 +1,3 @@
-const INCH_TO_CM = 2.54;
-const GAMES = {
-    horizontal: [
-        { name: 'Euro Truck Simulator', factor: 1, digits: 0, unit: '°' },
-        { name: 'RaceRoom Racing Experience', factor: 1, digits: 1, unit: '°' },
-    ],
-    vertical: [
-        { name: 'Assetto Corsa', factor: 1, digits: 1, unit: '°' },
-        { name: 'Assetto Corsa Competizione', factor: 1, digits: 1, unit: '°' },
-        { name: 'rFactor', factor: 1, digits: 0, unit: '°' },
-    ]
-}
-
-const CARS = {
-    drift: {
-        ref: 'drift',
-        image: `img/drift.png`,
-        car: { width: 169, height: 129, length: 452 },
-        scale: 1.75,
-        offset: {
-            horizontal: { x: 250, y: 140 },
-            vertical: { x: 250, y: 105 },
-        },
-    },
-    gt3: {
-        ref: 'gt3',
-        image: `img/gt3.png`,
-        car: { width: 185.2, height: 127.9, length: 457.3 },
-        scale: 1.725,
-        offset: {
-            horizontal: { x: 240, y: 65 },
-            vertical: { x: 240, y: 105 },
-        },
-    },
-    f1: {
-        ref: 'f1',
-        image: `img/f1.png`,
-        scale: 1.45,
-        car: { width: 190, height: 110, length: 545.0 },
-        offset: {
-            horizontal: { x: 270, y: 100 },
-            vertical: { x: 270, y: 85 },
-        },
-    },
-}
-
 function parseRatio(ratio) {
     if (!ratio) return null;
 
@@ -68,7 +22,7 @@ function calculateFOV() {
     const form = getForm();
     const ratio = parseRatio(form.ratio);
     const distance = getDistance(form.distance, form.distanceUnit);
-
+    
     const fov = FOV.calculate({
         ratio,
         size: form.size,
@@ -90,17 +44,18 @@ function calculateFOV() {
         tripleScreenAngle: fov.angle,
         curvedScreenRadius: form.curved ? form.radius / 10 : undefined,
         distance: distance,
+        unit: form.distanceUnit,
         carType: CARS[form.car],
     });
 }
 
 function getForm() {
     return {
-        ratio: document.getElementById('screenRatio').value,
+        ratio: document.querySelector('input[name="screenRatio"]:checked').value,
         size: parseFloat(document.getElementById('screenSize').value),
         distanceUnit: document.getElementById('distanceUnit').value,
         distance: parseFloat(document.getElementById('distance').value),
-        screens: document.getElementById('tripleScreen').checked ? 3 : 1,
+        screens: parseInt(document.querySelector('input[name="screenType"]:checked').value),
         curved: parseInt(document.getElementById('curvedScreenRadius').value) >= 500,
         radius: parseInt(document.getElementById('curvedScreenRadius').value),
         bezel: parseInt(document.getElementById('bezelThickness').value),
@@ -160,7 +115,6 @@ function updateResults(fov) {
 function toggleBezel() {
     const isTriple = document.getElementById('tripleScreen').checked;
     document.getElementById('bezelGroup').classList.toggle('hidden', !isTriple);
-    calculateFOV();
 }
 
 function convertDistanceUnit() {
@@ -175,7 +129,11 @@ function convertDistanceUnit() {
     
     if (newUnit === 'inch') {
         convertedValue = currentValue / INCH_TO_CM;
+        distanceInput.min = 10;
+        distanceInput.max = 80;
     } else {
+        distanceInput.min = 25;
+        distanceInput.max = 200;
         convertedValue = currentValue * INCH_TO_CM;
     }
     
@@ -184,10 +142,15 @@ function convertDistanceUnit() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('tripleScreen').addEventListener('change', toggleBezel);
-    document.getElementById('singleScreen').addEventListener('change', toggleBezel);
+    document.querySelectorAll('input[name="screenRatio"]').forEach(radio => {
+        radio.addEventListener('change', calculateFOV);
+    });
+    document.querySelectorAll('input[name="screenType"]').forEach(radio => {
+        radio.addEventListener('change', toggleBezel);
+        radio.addEventListener('change', calculateFOV);
+    });
+
     document.getElementById('distanceUnit').addEventListener('change', convertDistanceUnit);
-    document.getElementById('screenRatio').addEventListener('change', calculateFOV);
     document.getElementById('carType').addEventListener('change', calculateFOV);
 
     document.getElementById('screenSize').addEventListener('input', calculateFOV);

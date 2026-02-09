@@ -55,36 +55,64 @@
                     <label id="screenTypeLabel">Setup Type</label>
                     <div class="radio-group">
                         <div class="radio-option" for="singleScreen">
-                            <input type="radio" id="singleScreen" name="screenType" value="single" checked>
+                            <input type="radio" id="singleScreen" name="screenType" value="1" checked>
                             <label for="singleScreen">⎚<br /><span id="singleScreenLabel">Single Screen</span></label>
                         </div>
                         <div class="radio-option" for="tripleScreen">
-                            <input type="radio" id="tripleScreen" name="screenType" value="triple">
+                            <input type="radio" id="tripleScreen" name="screenType" value="3">
                             <label for="tripleScreen">⎚⎚⎚<br /><span id="tripleScreenLabel">Triple Screen</span></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="screenRatio" id="screenRatioLabel">Screen Ratio</label>
-                    <select id="screenRatio">
-                        <option value="16:9" selected>16:9</option>
-                        <option value="16:10">16:10</option>
-                        <option value="21:9">21:9</option>
-                        <option value="21:9">24:10</option>
-                        <option value="32:9">32:9</option>
-                        <option value="32:10">32:10</option>
-                        <option value="5:4">5:4</option>
-                        <option value="4:3">4:3</option>
-                    </select>
+                    <label id="screenRatioLabel">Setup Type</label>
+                    <div class="radio-col">
+                        <div class="radio-group">
+                            <div class="radio-option" for="screenRatio169">
+                                <input type="radio" id="screenRatio169" name="screenRatio" value="16:9" checked>
+                                <label for="screenRatio169">16:9</label>
+                            </div>
+                            <div class="radio-option" for="screenRatio1610">
+                                <input type="radio" id="screenRatio1610" name="screenRatio" value="16:10">
+                                <label for="screenRatio1610">16:10</label>
+                            </div>
+                            <div class="radio-option" for="screenRatio219">
+                                <input type="radio" id="screenRatio219" name="screenRatio" value="21:9">
+                                <label for="screenRatio219">21:9</label>
+                            </div>
+                            <div class="radio-option" for="screenRatio2410">
+                                <input type="radio" id="screenRatio2410" name="screenRatio" value="24:10">
+                                <label for="screenRatio2410">24:10</label>
+                            </div>
+                        </div>
+                        <div class="radio-group">
+                            <div class="radio-option" for="screenRatio329">
+                                <input type="radio" id="screenRatio329" name="screenRatio" value="32:9">
+                                <label for="screenRatio329">32:9</label>
+                            </div>
+                            <div class="radio-option" for="screenRatio3210">
+                                <input type="radio" id="screenRatio3210" name="screenRatio" value="32:10">
+                                <label for="screenRatio3210">32:10</label>
+                            </div>
+                            <div class="radio-option" for="screenRatio54">
+                                <input type="radio" id="screenRatio54" name="screenRatio" value="5:4">
+                                <label for="screenRatio54">5:4</label>
+                            </div>
+                            <div class="radio-option" for="screenRatio43">
+                                <input type="radio" id="screenRatio43" name="screenRatio" value="4:3">
+                                <label for="screenRatio43">4:3</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="screenSize" id="screenSizeLabel">
                         Screen Size
                     </label>
                     <div class="input-wrapper">
-                        <span class="unit" id="screenSizeOutput">&nbsp;</span>
+                        <span class="value" id="screenSizeOutput">&nbsp;</span>
                         <input type="range" id="screenSize" min="10" max="100" step="0.5" value="32" oninput="calculateFOV()">
                         <span class="unit" id="inchesUnit">inches</span>
                     </div>
@@ -93,8 +121,8 @@
                 <div class="form-group">
                     <label id="distanceLabel">Distance to Screen</label>
                     <div class="input-wrapper">
-                        <span class="unit" id="distanceOutput">&nbsp;</span>
-                        <input type="range" id="distance" min="35" max="200" step="1" value="60" oninput="calculateFOV()">
+                        <span class="value" id="distanceOutput">&nbsp;</span>
+                        <input type="range" id="distance" min="25" max="200" step="1" value="60" oninput="calculateFOV()">
                         <select id="distanceUnit">
                             <option value="cm">cm</option>
                             <option value="inch">inches</option>
@@ -105,11 +133,11 @@
                 <div class="form-group" id="radiusGroup">
                     <label for="curvedScreenRadius" id="curvedScreenRadiusOutputLabel">Curved Screen</label>
                     <div class="input-wrapper">
-                        <div class="unit">
+                        <div class="value">
                             <span id="curvedScreenRadiusOutput"></span>
                             <span id="curvedScreenRadiusOutputFlat">Flat</span>
                         </div>
-                        <input type="range" id="curvedScreenRadius" min="400" max="3000" step="100" value="0">
+                        <input type="range" id="curvedScreenRadius" min="400" max="3000" step="100" value="1000">
                         <span class="unit">mm</span>
                     </div>
                 </div>
@@ -117,7 +145,7 @@
                 <div class="form-group hidden" id="bezelGroup">
                     <label for="bezelThickness" id="bezelLabel">Bezel Thickness for Triple Screen</label>
                     <div class="input-wrapper">
-                        <span class="unit" id="bezelThicknessOutput">&nbsp;</span>
+                        <span class="value" id="bezelThicknessOutput">&nbsp;</span>
                         <input type="range" id="bezelThickness" min="0" max="100" step="1" value="0">
                         <span class="unit">mm</span>
                     </div>
@@ -178,6 +206,7 @@
         </footer>
     </div>
 
+    <script src="js/constants.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/draw.js"></script>
