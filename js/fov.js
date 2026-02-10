@@ -48,9 +48,9 @@
 			return {
 				width: actualWidth,
 				height: actualHeight,
-				horizontal: parseFloat((this.ARC_CONSTANT * (hAngle * screens)).toFixed(2)),
-				vertical: parseFloat((this.ARC_CONSTANT * vAngle).toFixed(2)),
-				angle: parseFloat((this.ARC_CONSTANT * hAngle).toFixed(2))
+				horizontal: Math.min(parseFloat((this.ARC_CONSTANT * (hAngle * screens)).toFixed(2)), 360),
+				vertical: Math.min(parseFloat((this.ARC_CONSTANT * vAngle).toFixed(2)), 360),
+				angle: Math.min(parseFloat((this.ARC_CONSTANT * hAngle).toFixed(2)), 120)
 			};
 		};
 

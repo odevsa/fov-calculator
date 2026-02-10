@@ -260,25 +260,30 @@ function drawFOV(fov, distance, isTripleScree) {
 }
 
 function drawScreens(amount, screenSize, sideAngle, distance, curvedScreenRadius) {
+    const halfWidth = screenSize / 2;
+    let sagitta = 0;
+    if (curvedScreenRadius)
+        sagitta = curvedScreenRadius - Math.sqrt(curvedScreenRadius**2 - halfWidth**2);
+
     ctx.strokeStyle = SETTINGS.screenColor;
     ctx.lineWidth = SETTINGS.screenThickness;
-    
     drawScreenSegment(0, -distance, screenSize, curvedScreenRadius);
 
     if (amount === 3) {
-        const halfWidth = screenSize / 2;
         const sideRad = (sideAngle * Math.PI) / 180;
 
         ctx.save();
-        ctx.translate(-halfWidth, -distance);
-        ctx.rotate(-sideRad);
-        drawScreenSegment(-halfWidth, 0, screenSize, curvedScreenRadius);
+        ctx.translate(-halfWidth, -distance + sagitta); 
+        ctx.rotate(-sideRad); 
+        ctx.translate(-halfWidth, -sagitta); 
+        drawScreenSegment(0, 0, screenSize, curvedScreenRadius);
         ctx.restore();
-        
+
         ctx.save();
-        ctx.translate(halfWidth, -distance);
+        ctx.translate(halfWidth, -distance + sagitta);
         ctx.rotate(sideRad);
-        drawScreenSegment(halfWidth, 0, screenSize, curvedScreenRadius);
+        ctx.translate(halfWidth, -sagitta);
+        drawScreenSegment(0, 0, screenSize, curvedScreenRadius);
         ctx.restore();
     }
 }
@@ -286,7 +291,6 @@ function drawScreens(amount, screenSize, sideAngle, distance, curvedScreenRadius
 function drawScreenSegment(xCenter, yCenter, width, r) {
     const halfWidth = width / 2;
     ctx.beginPath();
-
     if (r && r > halfWidth) {
         const theta = Math.asin(halfWidth / r);
         const startAngle = -Math.PI / 2 - theta;
