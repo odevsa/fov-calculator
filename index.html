@@ -113,7 +113,9 @@
                     </label>
                     <div class="input-wrapper">
                         <span class="value" id="screenSizeOutput">&nbsp;</span>
-                        <input type="range" id="screenSize" min="10" max="100" step="0.5" value="32" oninput="calculateFOV()">
+                        <button class="step" onclick="decrease('screenSize')">━</button>
+                        <input type="range" id="screenSize" min="10" max="100" step="0.5" value="32">
+                        <button class="step" onclick="increase('screenSize')">✚</button>
                         <span class="unit" id="inchesUnit">inches</span>
                     </div>
                 </div>
@@ -122,7 +124,9 @@
                     <label id="distanceLabel">Distance to Screen</label>
                     <div class="input-wrapper">
                         <span class="value" id="distanceOutput">&nbsp;</span>
-                        <input type="range" id="distance" min="25" max="200" step="1" value="60" oninput="calculateFOV()">
+                        <button class="step" onclick="decrease('distance')">━</button>
+                        <input type="range" id="distance" min="25" max="200" step="1" value="60">
+                        <button class="step" onclick="increase('distance')">✚</button>
                         <select id="distanceUnit">
                             <option value="cm">cm</option>
                             <option value="inch">inches</option>
@@ -137,16 +141,20 @@
                             <span id="curvedScreenRadiusOutput"></span>
                             <span id="curvedScreenRadiusOutputFlat">Flat</span>
                         </div>
+                        <button class="step" onclick="decrease('curvedScreenRadius')">━</button>
                         <input type="range" id="curvedScreenRadius" min="400" max="3000" step="100" value="0">
+                        <button class="step" onclick="increase('curvedScreenRadius')">✚</button>
                         <span class="unit">mm</span>
                     </div>
                 </div>
-
+                
                 <div class="form-group hidden" id="bezelGroup">
                     <label for="bezelThickness" id="bezelLabel">Bezel Thickness for Triple Screen</label>
                     <div class="input-wrapper">
                         <span class="value" id="bezelThicknessOutput">&nbsp;</span>
+                        <button class="step" onclick="decrease('bezelThickness')">━</button>
                         <input type="range" id="bezelThickness" min="0" max="100" step="1" value="0">
+                        <button class="step" onclick="increase('bezelThickness')">✚</button>
                         <span class="unit">mm</span>
                     </div>
                 </div>

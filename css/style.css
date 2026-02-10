@@ -217,7 +217,14 @@ input[type="number"] {
 input[type="range"] {
     flex-grow: 1;
     cursor: pointer;
-    margin: 0 15px;
+    margin: 0;
+}
+
+.step {
+    flex: 0;
+    background-color: transparent;
+    color: var(--text-primary);
+    padding: 15px;
 }
 
 .unit {

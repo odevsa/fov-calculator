@@ -38,6 +38,8 @@ function calculateFOV() {
     updateDraw({
         ratio,
         size: form.size,
+        width: fov.width, 
+        height: fov.height,
         horizontal: fov.horizontal, 
         vertical: fov.vertical,
         screenAmount: form.screens,
@@ -139,6 +141,22 @@ function convertDistanceUnit() {
     
     distanceInput.value = Math.round(convertedValue);
     calculateFOV();
+}
+
+function increase(id) {
+    const range = document.getElementById(id);
+    range.value = parseFloat(range.value) + parseFloat(range.step ?? 1);
+
+    const event = new Event('input', { bubbles: true });
+    range.dispatchEvent(event);
+}
+
+function decrease(id) {
+    const range = document.getElementById(id);
+    range.value = parseFloat(range.value) - parseFloat(range.step ?? 1);
+
+    const event = new Event('input', { bubbles: true });
+    range.dispatchEvent(event);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

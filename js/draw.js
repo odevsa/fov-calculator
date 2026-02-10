@@ -22,7 +22,7 @@ const SETTINGS = {
 };
 
 function updateDraw(params) {
-    const { ratio, size, horizontal, vertical, tripleScreenAngle, screenAmount, curvedScreenRadius, distance, unit, carType } = params;    
+    const { ratio, size, width, height, horizontal, vertical, tripleScreenAngle, screenAmount, curvedScreenRadius, distance, unit, carType } = params;    
     const carPosition = getCarPosition(carType);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
