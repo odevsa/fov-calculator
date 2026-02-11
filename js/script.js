@@ -61,7 +61,7 @@ function getForm() {
         curved: parseInt(document.getElementById('curvedScreenRadius').value) >= 500,
         radius: parseInt(document.getElementById('curvedScreenRadius').value),
         bezel: parseInt(document.getElementById('bezelThickness').value),
-        car: document.getElementById('carType').value,
+        car: document.querySelector('input[name="carType"]:checked').value,
     };
 }
 
@@ -102,17 +102,38 @@ function updateResults(fov) {
     const horizontalGamesDiv = document.getElementById('horizontal-games');
     horizontalGamesDiv.innerHTML = '';
     GAMES.horizontal.forEach(game => {
-        const value = isNaN(fov.horizontal) ? voidSimbol : (fov.horizontal * game.factor).toFixed(game.digits) + game.unit;
+        const value = isNaN(fov.horizontal) ? voidSimbol : fovValue(game.type, fov.horizontal, game.factor ?? 1, game.digits ?? 1) + (game.unit ?? '');
         horizontalGamesDiv.appendChild(gameHtml(game.name, value));
     });
 
     const verticalGamesDiv = document.getElementById('vertical-games');
     verticalGamesDiv.innerHTML = '';
     GAMES.vertical.forEach(game => {
-        const value = isNaN(fov.vertical) ? voidSimbol : (fov.vertical * game.factor).toFixed(game.digits) + game.unit;
+        const value = isNaN(fov.vertical) ? voidSimbol : fovValue(game.type, fov.vertical, game.factor ?? 1, game.digits ?? 1) + (game.unit ?? '');
         verticalGamesDiv.appendChild(gameHtml(game.name, value));
     });
 }
+
+function fovValue(type, fov, factor, digits) {
+    switch(type){
+        case 'divider':
+            return fovDivider(fov, factor, digits);
+        case 'radian':
+            return fovRadian(fov, factor, digits);
+        case 'dirt':
+            return fovDirt(fov, factor, digits);
+        case 'f1':
+            return fovF1(fov, factor, digits);
+        default:
+            return fovMultiplier(fov, factor, digits);
+    }
+}
+
+const fovMultiplier = (fov, factor, digits) => (fov * factor).toFixed(digits);
+const fovDivider = (fov, factor, digits) => (fov / factor).toFixed(digits);
+const fovRadian = (fov, factor, digits) => ((fov / 180 * Math.PI) * factor).toFixed(digits);
+const fovDirt = (fov, factor, digits) => Math.ceil(((fov - 30) / 5) * factor).toFixed(digits);
+const fovF1 = (fov, factor, digits) => ((fov - 77) / 2 * factor).toFixed(digits);
 
 function toggleBezel() {
     const isTriple = document.getElementById('tripleScreen').checked;
@@ -167,9 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', toggleBezel);
         radio.addEventListener('change', calculateFOV);
     });
+    document.querySelectorAll('input[name="carType"]').forEach(radio => {
+        radio.addEventListener('change', calculateFOV);
+    });
 
     document.getElementById('distanceUnit').addEventListener('change', convertDistanceUnit);
-    document.getElementById('carType').addEventListener('change', calculateFOV);
 
     document.getElementById('screenSize').addEventListener('input', calculateFOV);
     document.getElementById('distance').addEventListener('input', calculateFOV);

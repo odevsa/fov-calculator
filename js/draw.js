@@ -2,25 +2,6 @@ const canvas = document.getElementById('draw');
 const ctx = canvas.getContext('2d');
 const carImageCache = {};
 
-const SETTINGS = {
-    debug: false,
-    debugColor: 'rgba(255, 0, 0, 0.15)',
-    userColor: 'rgb(255, 255, 0)',
-    measurementColor: 'rgb(255, 255, 255)',
-    measurementFontSize: 18,
-    measurementStrokeColor: 'rgba(0, 0, 0, 0.5)',
-    measurementStrokeSize: 5,
-    userRadius: 10,
-    screenThickness: 10,
-    screenColor: 'rgb(255, 255, 0)',
-    fovBackground: 'rgba(0, 255, 0, 0.15)',
-    fovMultiplier: 10,
-    fovLines: 'rgb(0, 255, 0)',
-    fovLinesThickness: 2,
-    fontSize: 22,
-    carOpacity: 1,
-};
-
 function updateDraw(params) {
     const { ratio, size, width, height, horizontal, vertical, tripleScreenAngle, screenAmount, curvedScreenRadius, distance, unit, carType } = params;    
     const carPosition = getCarPosition(carType);
@@ -40,7 +21,7 @@ function updateDraw(params) {
     drawVerticalFov(ratio, size, carPosition, carType, height, vertical, distance, unit);
     
     
-    if(SETTINGS.debug) {
+    if(DRAW.debug) {
         drawCarBox(carPosition);
         
         console.log('car', carType);
@@ -85,7 +66,7 @@ function drawCarImage(carType) {
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0); 
-    ctx.globalAlpha = SETTINGS.carOpacity;
+    ctx.globalAlpha = DRAW.carOpacity;
     ctx.globalCompositeOperation = 'destination-over';
     ctx.drawImage(image, x, y, imageWidth * scale, imageHeight * scale);
     ctx.restore();
@@ -93,7 +74,7 @@ function drawCarImage(carType) {
     ctx.save();
     ctx.fillStyle = 'rgb(127, 127, 127)';
     ctx.textAlign = "right";
-    ctx.font = `${SETTINGS.fontSize}px Arial`;
+    ctx.font = `${DRAW.fontSize}px Arial`;
     ctx.fillText("https://odevsa.github.io/fov", canvas.width - 10, canvas.height - 10);
     ctx.restore();
 }
@@ -166,7 +147,7 @@ function drawViewLabel(label, position) {
     ctx.fillRect(position.x - 10, position.y - 30, canvas.width, 2);
     
     ctx.fillStyle = 'rgb(255, 255, 255)';
-    ctx.font = `${SETTINGS.fontSize}px Arial`;
+    ctx.font = `${DRAW.fontSize}px Arial`;
     ctx.fillText(label, position.x, position.y);
     ctx.restore();
 }
@@ -179,7 +160,7 @@ function drawMeasurements(position, ratio, size, fov, distance, unit, scale, rot
     ctx.translate(position.x, position.y);
     if (rotation) ctx.rotate(rotation + Math.PI / 2);
 
-    ctx.strokeStyle = SETTINGS.measurementColor;
+    ctx.strokeStyle = DRAW.measurementColor;
     ctx.lineWidth = 2;
     ctx.setLineDash([5, 5]);
     ctx.beginPath();
@@ -189,16 +170,16 @@ function drawMeasurements(position, ratio, size, fov, distance, unit, scale, rot
     ctx.setLineDash([]);
 
 
-    ctx.font = `${SETTINGS.measurementFontSize}px Arial`;
-    ctx.strokeStyle = SETTINGS.measurementStrokeColor;
-    ctx.lineWidth = SETTINGS.measurementStrokeSize;
+    ctx.font = `${DRAW.measurementFontSize}px Arial`;
+    ctx.strokeStyle = DRAW.measurementStrokeColor;
+    ctx.lineWidth = DRAW.measurementStrokeSize;
     ctx.lineJoin = "round";
-    ctx.fillStyle = SETTINGS.measurementColor;
+    ctx.fillStyle = DRAW.measurementColor;
     
     const textDistanceWidth = 35;
     const fovText = `FOV: ${fov.toFixed(1)}°`;
-    ctx.strokeText(fovText, 30, SETTINGS.measurementFontSize/3);
-    ctx.fillText(fovText, 30, SETTINGS.measurementFontSize/3);
+    ctx.strokeText(fovText, 30, DRAW.measurementFontSize/3);
+    ctx.fillText(fovText, 30, DRAW.measurementFontSize/3);
 
     ctx.textAlign = "center";
     const distanceValue = `${displayDistance}${displayUnit}`;
@@ -207,11 +188,11 @@ function drawMeasurements(position, ratio, size, fov, distance, unit, scale, rot
 
     ctx.textAlign = "right";
     const screenLabel = `Screen`;
-    ctx.strokeText(screenLabel, (- distance - 10)  * scale, -SETTINGS.measurementFontSize/3);
-    ctx.fillText(screenLabel, (- distance - 10)  * scale, -SETTINGS.measurementFontSize/3);
+    ctx.strokeText(screenLabel, (- distance - 10)  * scale, -DRAW.measurementFontSize/3);
+    ctx.fillText(screenLabel, (- distance - 10)  * scale, -DRAW.measurementFontSize/3);
     const sizeValue = `${size}" (${ratio.h}:${ratio.v})`;
-    ctx.strokeText(sizeValue, (- distance - 10)  * scale, SETTINGS.measurementFontSize);
-    ctx.fillText(sizeValue, (- distance - 10)  * scale, SETTINGS.measurementFontSize);
+    ctx.strokeText(sizeValue, (- distance - 10)  * scale, DRAW.measurementFontSize);
+    ctx.fillText(sizeValue, (- distance - 10)  * scale, DRAW.measurementFontSize);
 
     ctx.restore();
 }
@@ -220,10 +201,10 @@ function drawFOV(fov, distance, isTripleScree) {
     const fovPerScreen = isTripleScree ? fov / 3 : fov;
     const fovRadians = (fovPerScreen * Math.PI) / 180;
     const baseX = distance * Math.tan(fovRadians / 2);
-    const drawX = baseX * SETTINGS.fovMultiplier;
-    const drawDistance = distance * SETTINGS.fovMultiplier;
+    const drawX = baseX * DRAW.fovMultiplier;
+    const drawDistance = distance * DRAW.fovMultiplier;
 
-    ctx.fillStyle = SETTINGS.fovBackground;
+    ctx.fillStyle = DRAW.fovBackground;
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(-drawX, -drawDistance);
@@ -231,8 +212,8 @@ function drawFOV(fov, distance, isTripleScree) {
     ctx.closePath();
     ctx.fill();
     
-    ctx.strokeStyle = SETTINGS.fovLines;
-    ctx.lineWidth = SETTINGS.fovLinesThickness;
+    ctx.strokeStyle = DRAW.fovLines;
+    ctx.lineWidth = DRAW.fovLinesThickness;
     ctx.setLineDash([5, 5]);
     
     ctx.beginPath();
@@ -265,8 +246,8 @@ function drawScreens(amount, screenSize, sideAngle, distance, curvedScreenRadius
     if (curvedScreenRadius)
         sagitta = curvedScreenRadius - Math.sqrt(curvedScreenRadius**2 - halfWidth**2);
 
-    ctx.strokeStyle = SETTINGS.screenColor;
-    ctx.lineWidth = SETTINGS.screenThickness;
+    ctx.strokeStyle = DRAW.screenColor;
+    ctx.lineWidth = DRAW.screenThickness;
     drawScreenSegment(0, -distance, screenSize, curvedScreenRadius);
 
     if (amount === 3) {
@@ -304,14 +285,14 @@ function drawScreenSegment(xCenter, yCenter, width, r) {
 }
 
 function drawUserPosition() {
-    ctx.fillStyle = SETTINGS.userColor;
+    ctx.fillStyle = DRAW.userColor;
     ctx.beginPath();
-    ctx.arc(0, 0, SETTINGS.userRadius, 0, Math.PI * 2);
+    ctx.arc(0, 0, DRAW.userRadius, 0, Math.PI * 2);
     ctx.fill();
 }
 
 function drawCarBox(carPosition) {
-    ctx.fillStyle = SETTINGS.debugColor;
+    ctx.fillStyle = DRAW.debugColor;
     ctx.fillRect(carPosition.x, carPosition.topY - carPosition.width, carPosition.length, carPosition.width);
     ctx.fillRect(carPosition.x, carPosition.bottomY - carPosition.height, carPosition.length, carPosition.height);
 }
