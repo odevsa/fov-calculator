@@ -371,27 +371,31 @@ button {
 
 .draw-container {
     position: relative;
+    background: var(--bg-secondary);
+    border-radius: 15px;
+    border: 2px solid var(--border-light);
+    padding: 10px;
 }
 
 .draw-container .draw {
     width: 100%;
-    background: var(--bg-secondary);
     background-size: cover;
-    border-radius: 15px;
-    border: 2px solid var(--border-light);
+    border-radius: 10px;
+    border: 1px solid #0f172a;
+    background: var(--bg-tertiary);
 }
 
 .draw-container .save {
     position: absolute;
     right: 0;
-    top: 0;
+    bottom: 0;
     color: var(--text-primary);
     background-color: var(--bg-tertiary);
     border: 2px solid var(--border-color);
     padding: 15px;
     border-radius: 15px;
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
     opacity: 0.5;
 }
 
@@ -407,7 +411,7 @@ button {
     gap: 15px;
     background: var(--bg-secondary);
     border-radius: 15px;
-    padding: 20px;
+    padding: 10px;
     border: 2px solid var(--border-light);
     transition: background 0.3s ease, border-color 0.3s ease;
 }
