@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 const carImageCache = {};
 
 function updateDraw(params) {
-    const { ratio, size, width, height, horizontal, vertical, tripleScreenFov, tripleScreenAngle, screenAmount, screenRadius, distance, unit, carType } = params;    
+    const { ratio, size, width, height, horizontal, vertical, tripleScreen, tripleScreenAngle, screenAmount, screenRadius, bezel, distance, unit, carType } = params;    
     const carPosition = getCarPosition(carType);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -17,7 +17,7 @@ function updateDraw(params) {
     }
 
     drawCarImage(carType);
-    drawHorizontalFov(ratio, size, carPosition, carType, width, horizontal, tripleScreenFov, distance, unit, screenAmount, tripleScreenAngle, screenRadius);
+    drawHorizontalFov(ratio, size, carPosition, carType, width, horizontal, tripleScreen, distance, unit, screenAmount, tripleScreenAngle, screenRadius, bezel);
     drawVerticalFov(ratio, size, carPosition, carType, height, vertical, distance, unit);
     
     
@@ -79,27 +79,28 @@ function drawCarImage(carType) {
     ctx.restore();
 }
 
-function drawHorizontalFov(ratio, size, carPosition, carType, screenSize, fov, tripleScreenFov, distance, unit, screenAmount, tripleScreenAngle, screenRadius) {
+function drawHorizontalFov(ratio, size, carPosition, carType, screenSize, fov, fovTripleScreen, distance, unit, screenAmount, tripleScreenAngle, screenRadius, bezel) {
     const position = {
         x: carPosition.x + (carType.offset.horizontal.x * carType.scale),
         y: carPosition.topY - (carType.offset.horizontal.y * carType.scale)
     };
-    const rotation = -Math.PI / 2;
+    const rotation = -HALF_PI;
 
     drawView(
         position,
         screenSize,
         fov,
-        tripleScreenFov,
+        fovTripleScreen,
         distance,
         screenAmount,
         tripleScreenAngle,
         screenRadius,
+        bezel,
         carType.scale,
         rotation
     );
 
-    drawMeasurements(position, ratio, size, tripleScreenFov ?? fov, distance, unit, carType.scale, rotation);
+    drawMeasurements(position, ratio, size, fovTripleScreen ?? fov, distance, unit, carType.scale, rotation);
     drawViewLabel('Horizontal FOV', { x: 10, y: 30 });
 }
 
@@ -108,7 +109,7 @@ function drawVerticalFov(ratio, size, carPosition, carType, screenSize, fov, dis
         x: carPosition.x + (carType.offset.vertical.x * carType.scale),
         y: carPosition.bottomY - (carType.offset.vertical.y * carType.scale)
     };
-    const rotation = -Math.PI / 2;
+    const rotation = -HALF_PI;
 
     drawView(
         position,
@@ -119,6 +120,7 @@ function drawVerticalFov(ratio, size, carPosition, carType, screenSize, fov, dis
         1,
         0,
         undefined,
+        undefined,
         carType.scale,
         rotation
     );
@@ -127,7 +129,7 @@ function drawVerticalFov(ratio, size, carPosition, carType, screenSize, fov, dis
     drawViewLabel('Vertical FOV', { x: 10, y: (canvas.height / 2) + 30 });
 }
 
-function drawView(center, screenSize, fov, tripleScreenFov, distance, screenAmount, tripleScreenAngle, screenRadius, scale, rotation) {
+function drawView(center, screenSize, fov, fovTripleScreen, distance, screenAmount, tripleScreenAngle, screenRadius, bezel, scale, rotation) {
     const scaledScreenSize = screenSize * scale;
     const scaledDistance = distance * scale;
     const scaledRadius = screenRadius * scale;
@@ -136,8 +138,8 @@ function drawView(center, screenSize, fov, tripleScreenFov, distance, screenAmou
     ctx.translate(center.x, center.y);
     if (rotation) ctx.rotate(rotation);
     
-    drawFOV(fov, tripleScreenFov, scaledDistance, screenAmount == 3);
-    drawScreens(screenAmount, scaledScreenSize, tripleScreenAngle, scaledDistance, scaledRadius);
+    drawFOV(fov, fovTripleScreen, scaledDistance, screenAmount == 3);
+    drawScreens(screenAmount, scaledScreenSize, tripleScreenAngle, scaledDistance, scaledRadius, bezel);
     drawUserPosition();
     ctx.restore();
 }
@@ -160,7 +162,7 @@ function drawMeasurements(position, ratio, size, fov, distance, unit, scale, rot
 
     ctx.save();
     ctx.translate(position.x, position.y);
-    if (rotation) ctx.rotate(rotation + Math.PI / 2);
+    if (rotation) ctx.rotate(rotation + HALF_PI);
 
     ctx.strokeStyle = DRAW.measurementColor;
     ctx.lineWidth = 2;
@@ -199,7 +201,7 @@ function drawMeasurements(position, ratio, size, fov, distance, unit, scale, rot
     ctx.restore();
 }
 
-function drawFOV(fov, tripleScreenFov, distance, isTripleScree) {
+function drawFOV(fov, fovTripleScreen, distance, isTripleScree) {
     const fovRadians = (fov * Math.PI) / 180;
     const baseX = distance * Math.tan(fovRadians / 2);
     const drawX = baseX * DRAW.fovMultiplier;
@@ -225,9 +227,9 @@ function drawFOV(fov, tripleScreenFov, distance, isTripleScree) {
     ctx.stroke();
     
     if(isTripleScree){
-        const tripleFovRadians = (tripleScreenFov * Math.PI) / 180;
+        const tripleFovRadians = (fovTripleScreen * Math.PI) / 180;
         const baseTripleX = drawDistance * Math.tan(tripleFovRadians / 2);
-        const direction = tripleScreenFov > 180 ? 1 : -1;
+        const direction = fovTripleScreen > 180 ? 1 : -1;
 
         ctx.strokeStyle = 'RGB(255, 255, 255)';
         ctx.beginPath();
@@ -241,7 +243,7 @@ function drawFOV(fov, tripleScreenFov, distance, isTripleScree) {
     ctx.setLineDash([]);
 }
 
-function drawScreens(amount, screenSize, sideAngle, distance, screenRadius) {
+function drawScreens(amount, screenSize, sideAngle, distance, screenRadius, bezel) {
     const halfWidth = screenSize / 2;
     let sagitta = 0;
     if (screenRadius)
@@ -275,8 +277,8 @@ function drawScreenSegment(xCenter, yCenter, width, r) {
     ctx.beginPath();
     if (r && r > halfWidth) {
         const theta = Math.asin(halfWidth / r);
-        const startAngle = -Math.PI / 2 - theta;
-        const endAngle = -Math.PI / 2 + theta;
+        const startAngle = -HALF_PI - theta;
+        const endAngle = -HALF_PI + theta;
         ctx.arc(xCenter, yCenter + r, r, startAngle, endAngle);
     } else {
         ctx.moveTo(xCenter - halfWidth, yCenter);
@@ -288,7 +290,7 @@ function drawScreenSegment(xCenter, yCenter, width, r) {
 function drawUserPosition() {
     ctx.fillStyle = DRAW.userColor;
     ctx.beginPath();
-    ctx.arc(0, 0, DRAW.userRadius, 0, Math.PI * 2);
+    ctx.arc(0, 0, DRAW.userRadius, 0, DOUBLE_PI);
     ctx.fill();
 }
 

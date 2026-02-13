@@ -40,11 +40,12 @@ function calculateFOV() {
         width: fov.width,
         height: fov.height,
         horizontal: fov.horizontal,
-        tripleScreenFov: fov.tripleScreenFov,
+        tripleScreen: fov.tripleScreen,
         vertical: fov.vertical,
         screenAmount: fov.screens,
         tripleScreenAngle: fov.angle,
         screenRadius: fov.screenRadius,
+        bezel: fov.bezel,
         distance: distance,
         unit: form.distanceUnit,
         carType: CARS[form.car],
@@ -95,7 +96,7 @@ function gameHtml(label, value) {
 
 function updateResults(fov) {
     const voidSimbol = '∞';
-    document.getElementById('horizontalFOV').textContent = isNaN(fov.tripleScreenFov ?? fov.horizontal) ? voidSimbol: (fov.tripleScreenFov ?? fov.horizontal).toFixed(1) + '°';
+    document.getElementById('horizontalFOV').textContent = isNaN(fov.tripleScreen ?? fov.horizontal) ? voidSimbol: (fov.tripleScreen ?? fov.horizontal).toFixed(1) + '°';
     document.getElementById('verticalFOV').textContent = isNaN(fov.vertical) ? voidSimbol: fov.vertical.toFixed(1) + '°';
     document.getElementById('tripleScreenAngle').textContent =  isNaN(fov.angle) ? voidSimbol: fov.angle.toFixed(2) + '°';
 

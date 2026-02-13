@@ -1,6 +1,8 @@
-const LOCALES = ['en','pt-BR','es','fr','de','it','ja','zh-CN','ru','ko'];
-
+const HALF_PI = Math.PI / 2;
+const DOUBLE_PI = Math.PI * 2;
 const INCH_TO_CM = 2.54;
+
+const LOCALES = ['en','pt-BR','es','fr','de','it','ja','zh-CN','ru','ko'];
 
 const GAMES = {
     horizontal: [

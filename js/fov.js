@@ -1,8 +1,10 @@
 (function() {
 	var FOVCalculator, FOV;
-
+	
 	FOVCalculator = (function() {
 		function FOVCalculator() {
+			this.HALF_PI = Math.PI / 2;
+			this.DOUBLE_PI = Math.PI * 2;
 			this.INCHES_TO_CM = 2.54;
 			this.ARC_CONSTANT = 180 / Math.PI;
 		}
@@ -29,22 +31,24 @@
 			bezel,
 		}) {
 			const screensizeDiagonal = size * this.INCHES_TO_CM;
-			const bezelCalculated = bezel * 2;
 			const aspectRatioToSize = Math.sqrt((screensizeDiagonal * screensizeDiagonal) / ((ratio.h * ratio.h) + (ratio.v * ratio.v)));
 			const actualWidth = (ratio.h * aspectRatioToSize);
 			const actualHeight = (ratio.v * aspectRatioToSize);
 			const horizontalActualAngle = this._getAngularSize(actualWidth, distance);
-			const width = ratio.h * aspectRatioToSize;
-			const widthTripleScreen = (ratio.h * aspectRatioToSize) + bezelCalculated;
-			const halfPi = Math.PI / 2;
+			const calculatedWidth = (ratio.h * aspectRatioToSize) + (screens > 1 ? bezel * 2 : 0);
 			const calculatedHorizontalAngle = !!screenRadius
-				? this._getArcAngularSize(width, screenRadius, distance)
-				: this._getAngularSize(width, distance);
-			const calculatedTripleHorizontalAngle = !!screenRadius
-				? this._getArcAngularSize(widthTripleScreen, screenRadius, distance)
-				: this._getAngularSize(widthTripleScreen, distance);
-			const horizontalAngle = Math.min(calculatedHorizontalAngle, halfPi);
+			? this._getArcAngularSize(calculatedWidth, screenRadius, distance)
+			: this._getAngularSize(calculatedWidth, distance);
+			const horizontalAngle = Math.min(calculatedHorizontalAngle, this.HALF_PI);
 			const verticalAngle = 2 * Math.atan2(Math.tan(horizontalActualAngle / 2) * ratio.v, ratio.h);
+			
+			const invertedDistance = actualWidth - distance;
+			const calculatedTripleHorizontalAngle = calculatedHorizontalAngle > this.HALF_PI
+				? this.DOUBLE_PI - (!!screenRadius
+					? this._getArcAngularSize(calculatedWidth, screenRadius, invertedDistance)
+					: this._getAngularSize(calculatedWidth, invertedDistance)
+				)
+				: calculatedHorizontalAngle * 3;
 
 			return {
 				ratio,
@@ -56,7 +60,7 @@
 				width: actualWidth,
 				height: actualHeight,
 				horizontal: Math.min(parseFloat((this.ARC_CONSTANT * calculatedHorizontalAngle).toFixed(2)), 180),
-				tripleScreenFov: Math.min(parseFloat((this.ARC_CONSTANT * (calculatedTripleHorizontalAngle + (horizontalAngle * 2))).toFixed(2)), 360),
+				tripleScreen: Math.min(parseFloat((this.ARC_CONSTANT * calculatedTripleHorizontalAngle).toFixed(2)), 360),
 				vertical: Math.min(parseFloat((this.ARC_CONSTANT * verticalAngle).toFixed(2)), 180),
 				angle: Math.min(parseFloat((this.ARC_CONSTANT * horizontalAngle).toFixed(2)), 90)
 			};
