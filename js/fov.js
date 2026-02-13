@@ -32,22 +32,20 @@
 		}) {
 			const screensizeDiagonal = size * this.INCHES_TO_CM;
 			const aspectRatioToSize = Math.sqrt((screensizeDiagonal * screensizeDiagonal) / ((ratio.h * ratio.h) + (ratio.v * ratio.v)));
+			
 			const actualWidth = (ratio.h * aspectRatioToSize);
 			const actualHeight = (ratio.v * aspectRatioToSize);
-			const horizontalActualAngle = this._getAngularSize(actualWidth, distance);
 			const calculatedWidth = (ratio.h * aspectRatioToSize) + (screens > 1 ? bezel : 0);
-			const calculatedHorizontalAngle = !!screenRadius
-			? this._getArcAngularSize(calculatedWidth, screenRadius, distance)
-			: this._getAngularSize(calculatedWidth, distance);
+			const invertedDistance = actualWidth - distance;
+			
+			const calculatedHorizontalAngle = this.getAngularSize(calculatedWidth, distance, screenRadius);
 			const horizontalAngle = Math.min(calculatedHorizontalAngle, this.HALF_PI);
+
+			const horizontalActualAngle = this.getAngularSize(actualWidth, distance);
 			const verticalAngle = 2 * Math.atan2(Math.tan(horizontalActualAngle / 2) * ratio.v, ratio.h);
 			
-			const invertedDistance = actualWidth - distance;
 			const calculatedTripleHorizontalAngle = calculatedHorizontalAngle > this.HALF_PI
-				? this.DOUBLE_PI - (!!screenRadius
-					? this._getArcAngularSize(calculatedWidth, screenRadius, invertedDistance)
-					: this._getAngularSize(calculatedWidth, invertedDistance)
-				)
+				? this.DOUBLE_PI - this.getAngularSize(calculatedWidth - ((screens > 1 ? bezel * 2 : 0)), invertedDistance, screenRadius)
 				: calculatedHorizontalAngle * 3;
 
 			return {
@@ -104,29 +102,19 @@
      * @param {number} ratio - Horizontal aspect ratio (e.g., { h: 16, v: 9 })
      */
     FOVCalculator.prototype.calculateRBR = function(width, distance, ratio) {
-			return this._getAngularSize(width / ratio.h * ratio.v / 3 * 4, distance);
+			return this.getAngularSize(width / ratio.h * ratio.v / 3 * 4, distance);
 		}
 
 		/**
-		 * Calculates viewing angle for flat monitors using right triangle geometry.
-		 * @private
-		 * @param {number} width - Screen width in centimeters
-		 * @param {number} distance - Distance from observer to screen in centimeters
-		 * @returns {number} Viewing angle in radians
-		 */
-		FOVCalculator.prototype._getAngularSize = function(width, distance) {
-			return Math.atan2(width / 2, distance) * 2;
-		};
-
-		/**
-		 * Calculates viewing angle for curved monitors accounting for arc geometry.
-		 * @private
+		 * Calculates viewing angle for flat or curved monitors accounting for arc geometry.
 		 * @param {number} width - Screen width in centimeters (arc length)
 		 * @param {number} radius - Curve radius in centimeters (smaller = more curved)
 		 * @param {number} distance - Distance from observer to screen in centimeters
 		 * @returns {number} Viewing angle in radians
 		 */
-		FOVCalculator.prototype._getArcAngularSize = function(width, radius, distance) {
+		FOVCalculator.prototype.getAngularSize = function(width, distance, radius = undefined) {
+			if(!radius) return Math.atan2(width / 2, distance) * 2;
+
 			const centralAngle = width / radius;
 			const sagitta = radius * (1 - Math.cos(centralAngle / 2));
 			const halfChord = Math.sqrt((2 * radius * sagitta) - (sagitta * sagitta));
