@@ -35,7 +35,7 @@
 			const actualWidth = (ratio.h * aspectRatioToSize);
 			const actualHeight = (ratio.v * aspectRatioToSize);
 			const horizontalActualAngle = this._getAngularSize(actualWidth, distance);
-			const calculatedWidth = (ratio.h * aspectRatioToSize) + (screens > 1 ? bezel * 2 : 0);
+			const calculatedWidth = (ratio.h * aspectRatioToSize) + (screens > 1 ? bezel : 0);
 			const calculatedHorizontalAngle = !!screenRadius
 			? this._getArcAngularSize(calculatedWidth, screenRadius, distance)
 			: this._getAngularSize(calculatedWidth, distance);
@@ -60,7 +60,7 @@
 				width: actualWidth,
 				height: actualHeight,
 				horizontal: Math.min(parseFloat((this.ARC_CONSTANT * calculatedHorizontalAngle).toFixed(2)), 180),
-				tripleScreen: Math.min(parseFloat((this.ARC_CONSTANT * calculatedTripleHorizontalAngle).toFixed(2)), 360),
+				tripleScreen: screens > 1 ? Math.min(parseFloat((this.ARC_CONSTANT * calculatedTripleHorizontalAngle).toFixed(2)), 360) : undefined,
 				vertical: Math.min(parseFloat((this.ARC_CONSTANT * verticalAngle).toFixed(2)), 180),
 				angle: Math.min(parseFloat((this.ARC_CONSTANT * horizontalAngle).toFixed(2)), 90)
 			};

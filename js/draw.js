@@ -257,16 +257,16 @@ function drawScreens(amount, screenSize, sideAngle, distance, screenRadius, beze
         const sideRad = (sideAngle * Math.PI) / 180;
 
         ctx.save();
-        ctx.translate(-halfWidth, -distance + sagitta); 
+        ctx.translate(-halfWidth - bezel, -distance + sagitta); 
         ctx.rotate(-sideRad); 
-        ctx.translate(-halfWidth, -sagitta); 
+        ctx.translate(-halfWidth - bezel, -sagitta); 
         drawScreenSegment(0, 0, screenSize, screenRadius);
         ctx.restore();
 
         ctx.save();
-        ctx.translate(halfWidth, -distance + sagitta);
+        ctx.translate(halfWidth + bezel, -distance + sagitta);
         ctx.rotate(sideRad);
-        ctx.translate(halfWidth, -sagitta);
+        ctx.translate(halfWidth + bezel, -sagitta);
         drawScreenSegment(0, 0, screenSize, screenRadius);
         ctx.restore();
     }
