@@ -68,7 +68,7 @@
 		/**
 		 * Calculates viewing angle for flat or curved monitors accounting for arc geometry.
 		 * @param {number} width - Screen width in centimeters (arc length)
-		 * @param {number} radius - Curve radius in centimeters (smaller = more curved)
+		 * @param {number} [radius] - Curve radius in centimeters (smaller = more curved)
 		 * @param {number} distance - Distance from observer to screen in centimeters
 		 * @returns {number} Viewing angle in radians
 		 */
@@ -125,7 +125,7 @@
      * RBR uses a specific vertical FOV calculation in radians.
      * @param {number} width - Screen width in centimeters
      * @param {number} distance - Distance to screen in centimeters
-     * @param {number} ratio - Horizontal aspect ratio (e.g., { h: 16, v: 9 })
+     * @param {Object} ratio - Horizontal aspect ratio (e.g., { h: 16, v: 9 })
      */
     FOVCalculator.prototype.calculateRBR = function(width, distance, ratio) {
 			return this.getAngularSize(width / ratio.h * ratio.v / 3 * 4, distance);
