@@ -17,6 +17,7 @@
   "bezelThickness": "Spessore della cornice per schermo triplo",
   "calculateBtn": "Calcola FOV",
   "resetBtn": "Cancella",
+  "shareBtn": "Condividi",
   "results": "Risultati",
   "horizontalFov": "FOV Orizzontale",
   "verticalFov": "FOV Verticale",

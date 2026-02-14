@@ -17,6 +17,7 @@
   "bezelThickness": "Bezel Thickness for Triple Screen",
   "calculateBtn": "Calculate FOV",
   "resetBtn": "Clear",
+  "shareBtn": "Share",
   "results": "Results",
   "horizontalFov": "Horizontal FOV",
   "verticalFov": "Vertical FOV",

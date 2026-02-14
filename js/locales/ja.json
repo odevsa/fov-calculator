@@ -17,6 +17,7 @@
   "bezelThickness": "トリプル画面のベゼル厚さ",
   "calculateBtn": "FOVを計算",
   "resetBtn": "クリア",
+  "shareBtn": "共有",
   "results": "結果",
   "horizontalFov": "水平FOV",
   "verticalFov": "垂直FOV",

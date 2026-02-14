@@ -93,7 +93,8 @@ async function updatePageLanguage() {
   if (vLabel) vLabel.textContent = trans.verticalFov || "Vertical FOV";
   const langSelect = document.getElementById("languageSelect");
   if (langSelect) langSelect.value = lang;
-
+  const shareBtn = document.getElementById("shareButton");
+  if (shareBtn) shareBtn.textContent = "🔗 " + (trans.shareBtn || "Share");
   const videoLabel = document.querySelector(".videoLabel");
   if (videoLabel && trans.tip) videoLabel.innerHTML = trans.videoLabel;
   const videoText = document.querySelector(".videoText");

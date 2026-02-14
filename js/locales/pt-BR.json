@@ -17,6 +17,7 @@
   "bezelThickness": "Espessura do Moldura (Bezel)",
   "calculateBtn": "Calcular FOV",
   "resetBtn": "Limpar",
+  "shareBtn": "Compartilhar",
   "results": "Resultados",
   "horizontalFov": "Horizontal FOV",
   "verticalFov": "Vertical FOV",

@@ -17,6 +17,7 @@
   "bezelThickness": "Espesor de bisel para pantalla triple",
   "calculateBtn": "Calcular FOV",
   "resetBtn": "Limpiar",
+  "shareBtn": "Compartir",
   "results": "Resultados",
   "horizontalFov": "FOV Horizontal",
   "verticalFov": "FOV Vertical",

@@ -17,6 +17,7 @@
   "bezelThickness": "Épaisseur de lunette pour écran triple",
   "calculateBtn": "Calculer FOV",
   "resetBtn": "Effacer",
+  "shareBtn": "Partager",
   "results": "Résultats",
   "horizontalFov": "FOV Horizontal",
   "verticalFov": "FOV Vertical",

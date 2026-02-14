@@ -18,6 +18,7 @@
   "calculateBtn": "FOV 계산",
   "resetBtn": "지우기",
   "results": "결과",
+  "shareBtn": "공유",
   "horizontalFov": "수평 FOV",
   "verticalFov": "수직 FOV",
   "tripleScreenAngle": "삼중 화면 각도",

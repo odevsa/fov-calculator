@@ -17,6 +17,7 @@
   "bezelThickness": "三屏幕边框厚度",
   "calculateBtn": "计算FOV",
   "resetBtn": "清除",
+  "shareBtn": "分享",
   "results": "结果",
   "horizontalFov": "水平FOV",
   "verticalFov": "垂直FOV",

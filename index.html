@@ -49,12 +49,15 @@
               <option value="ko">한국어</option>
             </select>
           </div>
-          <button id="themeToggle">🌙 Dark</button>
+          <button class="top-button" id="themeToggle">🌙 Dark</button>
+          <button class="top-button" id="shareButton">🔗 Share</button>
         </div>
       </div>
 
       <div class="header">
-        <h1 id="headerTitle">⎚ FOV Calculator</h1>
+        <a href="/">
+          <h1 id="headerTitle">⎚ FOV Calculator</h1>
+        </a>
         <p id="headerSubtitle">
           Calculate the ideal field of view for racing simulators
         </p>
@@ -404,6 +407,8 @@
         </a>
       </footer>
     </div>
+
+    <div id="app-toast" class="hide"></div>
 
     <script src="js/constants.js"></script>
     <script src="js/translations.js"></script>

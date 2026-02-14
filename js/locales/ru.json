@@ -17,6 +17,7 @@
   "bezelThickness": "Толщина рамки для тройного экрана",
   "calculateBtn": "Рассчитать FOV",
   "resetBtn": "Очистить",
+  "shareBtn": "Поделиться",
   "results": "Результаты",
   "horizontalFov": "Горизонтальный FOV",
   "verticalFov": "Вертикальный FOV",

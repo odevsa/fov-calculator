@@ -84,6 +84,101 @@ function updateForm(form) {
     `display: ${!form.screenRadius ? "inline" : "none"};`;
 }
 
+function generateShareURL(form) {
+  const params = new URLSearchParams();
+  params.set("ratio", form.ratio);
+  params.set("size", form.size);
+  params.set("distanceUnit", form.distanceUnit);
+  params.set("distance", form.distance);
+  params.set("screens", form.screens);
+  if (form.screenRadius) params.set("screenRadius", form.screenRadius);
+  params.set("bezel", form.bezel);
+  params.set("car", form.car);
+
+  return `${location.origin}${location.pathname}?${params.toString()}`;
+}
+
+async function shareToClipboard() {
+  const form = getForm();
+  const url = generateShareURL(form);
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+      showToast("Share link copied to clipboard");
+      return;
+    }
+  } catch (e) {
+    showToast(`Copy: ${url}`);
+  }
+}
+
+function showToast(message) {
+  const toast = document.getElementById("app-toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove("hide");
+
+  clearTimeout(toast._hideTimeout);
+  toast._hideTimeout = setTimeout(function () {
+    toast.classList.add("hide");
+  }, 5000);
+}
+
+function readQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.toString()) return;
+
+  const ratio = params.get("ratio");
+  const size = parseFloat(params.get("size"));
+  const distanceUnit = params.get("distanceUnit");
+  const distance = parseFloat(params.get("distance"));
+  const screens = params.get("screens");
+  const screenRadius = params.get("screenRadius");
+  const bezel = parseInt(params.get("bezel"));
+  const car = params.get("car");
+
+  if (ratio) {
+    const el = document.querySelector(
+      `input[name="screenRatio"][value="${ratio}"]`,
+    );
+    if (el) el.checked = true;
+  }
+
+  if (!isNaN(size)) document.getElementById("screenSize").value = size;
+
+  if (distanceUnit) {
+    const unitEl = document.getElementById("distanceUnit");
+    if (unitEl) unitEl.value = distanceUnit;
+  }
+
+  if (!isNaN(distance)) document.getElementById("distance").value = distance;
+
+  if (screens) {
+    const screenEl = document.querySelector(
+      `input[name="screenType"][value="${screens}"]`,
+    );
+    if (screenEl) screenEl.checked = true;
+    toggleBezel();
+  }
+
+  if (screenRadius && !isNaN(parseInt(screenRadius))) {
+    document.getElementById("curvedScreenRadius").value =
+      parseInt(screenRadius);
+  }
+
+  if (!isNaN(bezel)) document.getElementById("bezelThickness").value = bezel;
+
+  if (car) {
+    const carEl = document.querySelector(
+      `input[name="carType"][value="${car}"]`,
+    );
+    if (carEl) carEl.checked = true;
+  }
+
+  const updatedForm = getForm();
+  updateForm(updatedForm);
+}
+
 function gameHtml(label, value) {
   const divContainer = document.createElement("div");
   divContainer.className = "result-item";
@@ -250,5 +345,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("bezelThickness")
     .addEventListener("input", calculateFOV);
 
+  readQueryParams();
+
+  const shareBtn = document.getElementById("shareButton");
+  if (shareBtn) shareBtn.addEventListener("click", shareToClipboard);
   calculateFOV();
 });
