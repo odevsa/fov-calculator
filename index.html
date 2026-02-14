@@ -96,7 +96,7 @@
           </div>
 
           <div class="form-group">
-            <label id="screenRatioLabel">Setup Type</label>
+            <label id="screenRatioLabel">Screen Ratio</label>
             <div class="radio-col">
               <div class="radio-group">
                 <div class="radio-option" for="screenRatio169">
@@ -179,7 +179,7 @@
           </div>
 
           <div class="form-group">
-            <label for="screenSize" id="screenSizeLabel"> Screen Size </label>
+            <label for="screenSize" id="screenSizeLabel">Screen Size</label>
             <div class="input-wrapper">
               <span class="value" id="screenSizeOutput">&nbsp;</span>
               <button class="step" onclick="decrease('screenSize')">━</button>
@@ -274,38 +274,6 @@
             center of the screen. Try measuring the approximate distance and
             adjust as needed for comfort.
           </div>
-
-          <div class="form-group">
-            <label id="resultsLabel">Results</label>
-            <div class="box-section" id="resultsSection">
-              <div class="results-row">
-                <div class="results-col">
-                  <div class="result-item highlight">
-                    <div class="result-label" id="horizontalFOVLabel">
-                      Horizontal FOV
-                    </div>
-                    <div class="result-value" id="horizontalFOV">-</div>
-                  </div>
-                  <div id="horizontal-games" class="results-col"></div>
-                </div>
-                <div class="results-col">
-                  <div class="result-item highlight">
-                    <div class="result-label" id="verticalFOVLabel">
-                      Vertical FOV
-                    </div>
-                    <div class="result-value" id="verticalFOV">-</div>
-                  </div>
-                  <div id="vertical-games" class="results-col"></div>
-                </div>
-              </div>
-              <div class="result-item highlight">
-                <div class="result-label" id="tripleScreenAngleLabel">
-                  Triple Screen Angle
-                </div>
-                <div class="result-value" id="tripleScreenAngle">-</div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="section">
@@ -352,7 +320,39 @@
             <canvas class="draw" width="800" height="1000" id="draw"></canvas>
           </div>
 
-          <div class="form-group">
+          <div class="section-group">
+            <label id="resultsLabel">Results</label>
+            <div class="box-section" id="resultsSection">
+              <div class="results-row">
+                <div class="results-col">
+                  <div class="result-item highlight">
+                    <div class="result-label" id="horizontalFOVLabel">
+                      Horizontal FOV
+                    </div>
+                    <div class="result-value" id="horizontalFOV">-</div>
+                  </div>
+                  <div id="horizontal-games" class="results-col"></div>
+                </div>
+                <div class="results-col">
+                  <div class="result-item highlight">
+                    <div class="result-label" id="verticalFOVLabel">
+                      Vertical FOV
+                    </div>
+                    <div class="result-value" id="verticalFOV">-</div>
+                  </div>
+                  <div id="vertical-games" class="results-col"></div>
+                </div>
+              </div>
+              <div class="result-item highlight">
+                <div class="result-label" id="tripleScreenAngleLabel">
+                  Triple Screen Angle
+                </div>
+                <div class="result-value" id="tripleScreenAngle">-</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-group">
             <label id="videoLabel">Why calculate FOV?</label>
             <div class="box-section" id="videoSection">
               <div class="video-container">
